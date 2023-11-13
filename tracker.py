@@ -3,9 +3,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
+plt.style.use("dark_background")
+
+
 class Tracker:
-    def __init__(self, stock_symbol: str, start, end=None):
+    def __init__(self, stock_symbol: str, start, end:str=None):
         self.df = yf.download(stock_symbol, start=start, end=end)
+
+    def add_metric(self, metric_name: str, metric_data: pd.Series):
+        for col in self.df.columns:
+            if col == metric_name:
+                print("metric already exists")
+                return
+        self.df[metric_name] = metric_data
 
     def plot_separate(self, *metrics: str):
         fig, ax = plt.subplots(1, len(metrics), figsize=[24/len(metrics), 4])
